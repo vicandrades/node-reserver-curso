@@ -4,14 +4,17 @@ const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
 
+/**************** bodyparser se usa para obtener el body de las peticiones */
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
-
 // parse application/json
 app.use(bodyParser.json());
 
-app.use(require('./routes/usuario'));
 
+//Configuracion Global de rutas
+app.use(require('./routes/index'));
+
+// conexion a bd con MONGOOSE
 mongoose.connect(process.env.URLDB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

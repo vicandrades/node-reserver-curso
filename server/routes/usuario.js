@@ -7,11 +7,10 @@ const bcrypt = require('bcrypt');
 const _ = require('underscore');
 
 const bodyParser = require('body-parser');
-const { request } = require('express');
-//generalmente se consulta
+const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
 
 
-app.get('/usuario', function(req, res) {
+app.get('/usuario', verificaToken, (req, res) => {
 
     //parametros opcionales caen en query y asumimos que viene una variable desde = el valor ej. ( {{url}}/usuario?desde=10 )
     //para enviar parametros opcionales en la url se coloca al final signo de interrogacion nombre del parametro
@@ -33,7 +32,7 @@ app.get('/usuario', function(req, res) {
                 })
             }
 
-            Usuario.count({ estado: true }, (err, conteo) => {
+            Usuario.countDocuments({ estado: true }, (err, conteo) => {
 
                 res.json({
                     ok: true,
@@ -48,7 +47,7 @@ app.get('/usuario', function(req, res) {
 
 
 //generalmente para crear
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
 
     //el body se obtiene del middle bodyParser
     let body = req.body;
@@ -78,7 +77,7 @@ app.post('/usuario', function(req, res) {
 
 
 
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
     //funcion pick de underscore.js permite obtener unicamente las propiedades que se pasan en el array de un objeto
     //utilidad la peticion que viene del front podria enviarnos elementos que no queremos actualizar por ende con esto solo tomamos en cuenta los que permitimos en el array
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
@@ -115,7 +114,7 @@ app.put('/usuario/:id', function(req, res) {
 
 
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
     let id = req.params.id;
     let desactivarEstado = { estado: false };
     //Usuario.findByIdAndRemove(id, (err, usuarioEliminado) => {
