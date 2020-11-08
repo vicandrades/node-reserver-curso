@@ -1,4 +1,4 @@
 node_modules/
 tmp/
-uploads/productos
-uploads/usuarios
+# uploads/productos/
+# uploads/usuarios/
