@@ -16,7 +16,7 @@ app.get('/productos', verificaToken, (req, res) => {
     //paginado
 
     let desde = req.query.desde || 0;
-    let limite = req.query.limite || 5;
+    let limite = req.query.limite || 15;
     desde = Number(desde);
     limite = Number(limite);
 
